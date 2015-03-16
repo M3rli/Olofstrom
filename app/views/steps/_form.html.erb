@@ -17,7 +17,7 @@
   </div>
   <div class="field">
     <%= f.label :Beskrivning %><br>
-    <%= f.text_field :desc %>
+    <%= f.text_area :desc, :class => "tinymce" %>
   </div>
   <div class="field">
     <%= f.hidden_field :category_id %>
@@ -26,3 +26,4 @@
     <%= f.button :Spara, :class => 'form-btn ease' %>
   </div>
 <% end %>
+<%= tinymce %>
