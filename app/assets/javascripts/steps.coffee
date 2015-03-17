@@ -59,7 +59,6 @@ $ ->
     substeps = $.parseJSON(gon.completion)
     if substeps
       substepsx = substeps[gon.catname][gon.stepname]
-      console.log substepsx
       for x,y of substepsx
         if y == "true"
           $("#"+x).prop("checked", true)
@@ -234,5 +233,3 @@ normalize = (name) ->
 getStepItems = (item) ->
   fvalue = $(item).attr("step_item")
   return fvalue
-
-

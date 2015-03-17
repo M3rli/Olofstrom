@@ -3,32 +3,13 @@ require 'csv'
 class User < ActiveRecord::Base
   has_many :comments
 
+
+
   searchkick autocomplete: ['name'],
              suggest: ['name']
 
   def self.from_omniauth(auth)
-    array = {
-        "Testmodul1" => {
-            "Steg1" => {
-                "Video_1" => true,
-                "Video_2" => true,
-                "Quiz_1" => true,
-                "Uppdrag_1" => true,
-                "Quiz_2" => true
-            },
-            "Steg2" => {
-                "Video_3" => true,
-                "Video_4" => true,
-                "Quiz_3" => true,
-                "Uppdrag_2" => true,
-                "Quiz_4" => true
-            },
-            "Examination" => {
-                "Rattad" => true,
-                "Klar" => true
-            }
-        }
-    }
+    array = {}
     where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |user|
       user.provider = auth.provider
       user.uid = auth.uid
@@ -36,7 +17,9 @@ class User < ActiveRecord::Base
       user.email = auth.info.email
       user.image = auth.info.image
       user.admin = true
-      user.completion = if h = User.where({uid:auth.uid}).first then h.to_json else array.to_json end
+      comp = User.where({name:auth.info.name}).first
+      compl = JSON.parse(comp.completion) if comp
+      user.completion = if compl then compl.to_json else array.to_json end
       user.oauth_token = auth.credentials.token
       user.oauth_expires_at = Time.at(auth.credentials.expires_at)
       user.save!
@@ -45,28 +28,7 @@ class User < ActiveRecord::Base
 
 
   def self.import(file)
-    array = {
-        "Testmodul1" => {
-            "Steg1" => {
-                "Video_1" => true,
-                "Video_2" => true,
-                "Quiz_1" => true,
-                "Uppdrag_1" => true,
-                "Quiz_2" => true
-            },
-            "Steg2" => {
-                "Video_3" => true,
-                "Video_4" => true,
-                "Quiz_3" => true,
-                "Uppdrag_2" => true,
-                "Quiz_4" => true
-            },
-            "Examination" => {
-                "Rattad" => true,
-                "Klar" => true
-            }
-        }
-    }
+    array = {}
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
