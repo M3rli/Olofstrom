@@ -40,7 +40,7 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
+ 
 # Use Unicorn as the app server
 # gem 'unicorn'
 
@@ -64,8 +64,10 @@ end
 # formtastic instead of standard form
 gem 'formtastic', '~> 3.0'
 
-# Texteditor using CKEditor
+
+# texteditor
 #gem 'ckeditor'
+gem 'tinymce-rails'
 
 # Image upload to CKEditor
 #gem "paperclip"
